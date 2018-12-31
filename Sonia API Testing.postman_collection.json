@@ -1,0 +1,788 @@
+{
+	"info": {
+		"_postman_id": "e0c45d54-7953-468b-b715-247a6479a3a0",
+		"name": "Sonia API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Employee",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Employee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1933cb58-03d4-4ec7-b462-2cf45f7881ce",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data1 = [false, 1, \"Success\"];",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status Code in the Response Header is \" + data1[1]] = jsonData.responseHeader.statusCode === data1[1];",
+									"tests[\"Message in the Response Header is \" + data1[2]] = jsonData.responseHeader.message === data1[2];",
+									"tests[\"isError bit in the Response Header is \" + data1[0]] = jsonData.responseHeader.isError === data1[0];",
+									"",
+									"console.log(responseBody);",
+									"tests[\"User Id should not be empty\"] = jsonData.responseBody.userId !== \"\";",
+									"tests[\"Email should not be empty\"] = jsonData.responseBody.email !== \"\";",
+									"tests[\"Employee Type ID should not be empty\"] = jsonData.responseBody.employeeTypeId !== \"\";",
+									"tests[\" Employee Type Name should not be empty\"] = jsonData.responseBody.employeeTypeName !== \"\";",
+									"tests[\" Employee TypeDisplay Name should not be empty\"] = jsonData.responseBody.employeeTypeDisplayName !== \"\";",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "de2b935b-4323-4d87-91d3-aba5e7813a4a",
+								"type": "text/javascript",
+								"exec": [
+									"var randomNo=Math.floor((Math.random() * 10) + 1);",
+									"",
+									"console.log(randomNo);",
+									"pm.globals.set(\"randomIdGenerate\",randomNo);",
+									"",
+									"",
+									"// Random Numbers can be genertaed by using the built in function {{$randomInt}} but this can only be used in the URL or in the Key of Header tab. Also, there is limit of this bulit in function",
+									"// This is the reason we are not using this built in function"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/employee?id={{randomIdGenerate}}&userId={{$randomInt}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"employee"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{randomIdGenerate}}"
+								},
+								{
+									"key": "userId",
+									"value": "{{$randomInt}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TimeSlotTypes",
+			"description": "",
+			"item": [
+				{
+					"name": "getTimeSlotType",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fe858687-7468-4d1a-a81e-1ea0076f7593",
+								"type": "text/javascript",
+								"exec": [
+									"/*var ResponseBodyData=JSON.parse(responseBody);",
+									"tests[\"Success Message obtained in the response header\"]=ResponseBodyData.responseHeader.message==='Success';*/",
+									"",
+									"pm.test(\"Response Header has success message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Success\");",
+									"});",
+									"",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/timeslotstypes",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"timeslotstypes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "WareHouse",
+			"description": null,
+			"item": [
+				{
+					"name": "PostWareHouse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dd3f686c-993c-461d-b731-769816d7defc",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Response Header has Success Message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Success\");",
+									"});",
+									"",
+									"var data1 = [false, 1];",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Status Code in the Response Header is \" + data1[1]] = jsonData.responseHeader.statusCode === data1[1];",
+									"tests[\"isError bit in the Response Header is \" + data1[0]] = jsonData.responseHeader.isError === data1[0];",
+									"",
+									"/*var RequestData = JSON.parse(request.data);",
+									"var ResponseBodyData = JSON.parse(responseBody);",
+									"tests[\"WareHouse Identifier in the Request Body and Response body are equal\"]= RequestData.warehouseIdentifier===ResponseBodyData.responseBody.warehouse.warehouseIdentifier;*/",
+									"var jsonData = JSON.parse(responseBody);",
+									"console.log(jsonData); ",
+									"postman.setEnvironmentVariable(\"WareHouseID\", jsonData.responseBody.warehouse.id);",
+									"console.log(\"The posted WareHouse has ID \"+jsonData.responseBody.warehouse.id);",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "52afbdf6-109e-4834-b3e9-dd0ea6c389c2",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"warehouseIdentifier\": {{$randomInt}},\r\n  \"displayName\": \"test wavfreeehouse\",\r\n  \"isActive\": true,\r\n  \"isDefault\": false,\r\n  \"canStoreAssets\": true,\r\n  \"parkingAddress\": \"Ilford IG2 7RN, United Kingdom\",\r\n  \"warehouseAddress\": \"141-157 Acre Ln, Brixton, London SW2 5UA\"\r\n}"
+						},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/warehouse?token={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"warehouse"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DiscountCode",
+			"description": "",
+			"item": [
+				{
+					"name": "getDiscountCode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ecebef13-4dc0-4ad0-a8ab-6ba95119eac0",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.globals.set(\"TotalDiscountCodes\",jsonData.responseBody.discountCodes.length); ",
+									"tests[\"The Total Discount Codes are \"+pm.globals.get(\"TotalDiscountCodes\")]=pm.globals.get(\"TotalDiscountCodes\");",
+									"var DiscountCodes=jsonData.responseBody.discountCodes.length;",
+									"console.log(\"Total Number of Discount Codes are \" +DiscountCodes);",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}\n",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postDiscountCode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "62d82bf9-2dd4-4b35-a2fc-d61056dcf41b",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"code\": {{$randomInt}},\r\n\t\"description\": \"Discount Code \",\r\n\t\"discountCodeType\": \r\n\t{\r\n\t\t\"description\": \"Type `Fixed_RECURRING` will have a fixed amount or percent, and will be applied for a fixed period of time or infinite.\",\r\n\t\t\"id\": 1,\r\n\t\t\"type\": \"FIXED_RECURRING\"\r\n\t},\r\n\t\"discountRules\": \r\n\t[\r\n\t\t{\r\n\t\t\t\"discountType\": \"Percent\",\r\n\t\t\t\"discountValue\": \"10\"\r\n\t\t\r\n\t}\r\n\t],\r\n\t\"isLastMonthRecurring\": false,\r\n\t\"isNumberOfMonthsLimited\": false,\r\n\t\"maxRedemption\": \"10\",\r\n\t\"ruleGroups\": [],\r\n\t\"validFrom\": \"2019-10-08 00:00:00\",\r\n\t\"validTill\": \"2020-01-12 00:00:00\"\r\n}\r\n\r\n\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDiscountCodeAfterPost",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "eb0106ab-d800-49c3-af2f-cc6d158889ce",
+								"type": "text/javascript",
+								"exec": [
+									"var response=JSON.parse(responseBody);",
+									"var PostLength=response.responseBody.discountCodes.length;",
+									"console.log(\"Length after Posting the Discount Code is \"+ PostLength);",
+									"",
+									"var GetLength=pm.globals.get(\"TotalDiscountCodes\");",
+									"console.log(\"Length before Posting the Discount Code is \"+ GetLength);",
+									"",
+									"tests[\"The Length after posting the Discount Code is \"+PostLength]=PostLength===GetLength+1;",
+									"",
+									"pm.globals.set(\"DiscountCodeAfterPost\",response.responseBody.discountCodes.length);",
+									"var dcLength=pm.globals.get(\"DiscountCodeAfterPost\");",
+									"",
+									"pm.globals.set(\"DiscountCodeIDforDelete\",response.responseBody.discountCodes[0].id); ",
+									"",
+									"//pm.globals.set(\"DiscountCodeIDforDelete\",response.responseBody.discountCodes[0].id); ",
+									"//console.log(DiscountCodeIDforDelete);",
+									"",
+									"//console.log(dcLength);",
+									"",
+									"//console.log(response.responseBody.discountCodes[i].id);",
+									"//var i=0;",
+									"//for(i ; i<dcLength; i++)",
+									"//{   ",
+									"   //console.log(response.responseBody.discountCodes[i].id);",
+									"   ",
+									"",
+									"   // response.responseBody.discountCodes[i].id;",
+									"    // if(i==dcLength)",
+									"    // {   ",
+									"    //     console.log('here');",
+									"    //   ",
+									"    // }",
+									"    // else",
+									"    // {",
+									"    //     console.log('here2');",
+									"    // }",
+									"    ",
+									"//}",
+									"    ",
+									"    ",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"pm.globals.unset(\"variable_key\");",
+									"",
+									"pm.globals.unset(\"variable_key\");",
+									"",
+									"pm.globals.unset(\"variable_key\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}\n",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutDiscountCode(Delete)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e151425c-5af3-4f96-bea8-9a386a466400",
+								"type": "text/javascript",
+								"exec": [
+									"var response=JSON.parse(responseBody);",
+									"tests[\"The message for Discount Code Deletion is Success\"]=response.responseHeader.message===\"Success\";",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"code\": \"DC1259\",\r\n\t\"description\": \"Discount Code named DC1259\",\r\n\t\"discountCodeType\": \r\n\t{\r\n\t\t\"description\": \"Type `Fixed_RECURRING` will have a fixed amount or percent, and will be applied for a fixed period of time or infinite.\",\r\n\t\t\"id\": 1,\r\n\t\t\"type\": \"FIXED_RECURRING\"\r\n\t},\r\n\r\n\t\"discountCodeUsers\": null,\r\n\t\"discountRules\": \r\n\t[{\r\n\t\t\"recurringMonth\": -1,\r\n\t\t\"discountType\": \"PERCENT\",\r\n\t\t\"discountValue\": 10,\r\n\t\t\"id\": 27\r\n\t}],\r\n\t\"id\": {{DiscountCodeIDforDelete}},\r\n\t\"isActive\": false,\r\n\t\"isLastMonthRecurring\": false,\r\n\t\"isNumberOfMonthsLimited\": false,\r\n\t\"maxRedemption\": 10,\r\n\t\"numberOfMonths\": -1,\r\n\t\"redemptionLeft\": 10,\r\n\t\"ruleGroups\": null,\r\n\t\"validFrom\": \"2018-10-08 00:00:00\",\r\n\t\"validTill\": \"2019-01-12 00:00:00\"\r\n}\r\n\r\n\r\n\r\n\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDiscountCodeAfterDelete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6e821b9e-7392-41d0-b56f-0d8ed39b7131",
+								"type": "text/javascript",
+								"exec": [
+									"var response=JSON.parse(responseBody);",
+									"var DeleteCodeLength=response.responseBody.discountCodes.length;",
+									"console.log(\"Length after Deleting the Discount Code is \"+ DeleteCodeLength);",
+									"",
+									"var GetLengthAfterPost = pm.globals.get(\"DiscountCodeAfterPost\");",
+									"console.log(\"Length before Deleting the Discount Code is \"+ GetLengthAfterPost);",
+									"",
+									"tests[\"The Length after deleting the Discount Code is \"+DeleteCodeLength]=DeleteCodeLength===GetLengthAfterPost-1;",
+									"",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}\n",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditDiscountCode(Put)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3a128258-9d6c-4728-9bc8-5d6785299a9e",
+								"type": "text/javascript",
+								"exec": [
+									"var response=JSON.parse(responseBody);",
+									"tests[\"Discount Code Updation message :  \"+response.responseHeader.message]=response.responseHeader.message===\"Success\";",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"code\": \"DC59\",\r\n\t\"description\": \"Discount Code named dccc 59\",\r\n\t\"discountCodeType\": \r\n\t{\r\n\t\t\"description\": \"Type `Fixed_RECURRING` will have a fixed amount or percent, and will be applied for a fixed period of time or infinite.\",\r\n\t\t\"id\": 1,\r\n\t\t\"type\": \"FIXED_RECURRING\"\r\n\t},\r\n\t\"discountRules\":\r\n\t[\r\n\t\t{\r\n\t\t\t\"recurringMonth\": -1,\r\n\t\t\t\"discountType\": \"PERCENT\",\r\n\t\t\t\"discountValue\": 50,\r\n\t\t\t\"id\": 3\r\n\t\t}\r\n\t],\r\n\t\"id\": 117,\r\n\t\"isActive\": \"false\",\r\n\t\"isLastMonthRecurring\": \"false\",\r\n\t\"isNumberOfMonthsLimited\": \"true\",\r\n\t\"maxRedemption\": \"10000\",\r\n\t\"numberOfMonths\": \"2\",\r\n\t\"ruleGroups\": [],\r\n\t\"validFrom\": \"2018-01-02 00:00:00\",\r\n\t\"validTill\": \"2020-01-01 00:00:00\"\r\n}\r\n\r\n\r\n\r\n\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NegativeCase",
+			"description": "",
+			"item": [
+				{
+					"name": "NegativeURLGet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5fcf7d19-54b4-4417-b176-76ca79d3962c",
+								"type": "text/javascript",
+								"exec": [
+									"var response=JSON.parse(responseBody);",
+									"tests[\"Get Request unscuccessful due to Incorrect URL\"]=response.responseHeader.statusCode===0;",
+									"",
+									"//{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{Token}}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}discountcode={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}discountcode={{Token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NegativeTokenGet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d1389a78-c822-427a-aa6e-8572fc3b83d1",
+								"type": "text/javascript",
+								"exec": [
+									"var response=JSON.parse(responseBody);",
+									"tests[\"Token is incorrect && the isError bit is True\"]=response.responseHeader.isError===true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/discountCode?token={{IncorrectToken}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"discountCode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{IncorrectToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ReservedAmount",
+			"description": "",
+			"item": [
+				{
+					"name": "ReservedAmount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2ad3a312-78f0-42dd-8547-06a96469a25b",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data1 = [false, 1, \"Success\"];",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status Code in the Response Header is \" + data1[1]] = jsonData.responseHeader.statusCode === data1[1];",
+									"tests[\"Message in the Response Header is \" + data1[2]] = jsonData.responseHeader.message === data1[2];",
+									"tests[\"isError bit in the Response Header is \" + data1[0]] = jsonData.responseHeader.isError === data1[0];",
+									"",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/financialInfo/blockedPayment?token={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"financialInfo",
+								"blockedPayment"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ServiceUnAvailibilty",
+			"description": "",
+			"item": [
+				{
+					"name": "GetServiceUnAvailibility",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b3b25037-4d5a-4a1f-b01e-0dedbc85510e",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var data1 = [false, 1, \"Success\"];",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status Code in the Response Header is \" + data1[1]] = jsonData.responseHeader.statusCode === data1[1];",
+									"tests[\"Message in the Response Header is \" + data1[2]] = jsonData.responseHeader.message === data1[2];",
+									"tests[\"isError bit in the Response Header is \" + data1[0]] = jsonData.responseHeader.isError === data1[0];"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/serviceUnavailability?token={{Token}}&from=2018-11-29&to=2019-01-29",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"serviceUnavailability"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								},
+								{
+									"key": "from",
+									"value": "2018-11-29"
+								},
+								{
+									"key": "to",
+									"value": "2019-01-29"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostServiceUnavailibilty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f22a3fe7-d40e-47c0-a6f4-06210cd69e7e",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Response Header has Success Message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Success\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date\": \"2018-11-30\",\r\n  \"description\": \"Sonia 12345\",\r\n  \"endTime\": \"13:03:27\",\r\n  \"isActive\": true,\r\n  \"startTime\": \"12:03:27\",\r\n  \"timeSlotTypeId\": \"2\"\r\n}"
+						},
+						"url": {
+							"raw": "{{GeneralURL}}{{DEVEnvironment}}v1/serviceUnavailability?token={{Token}}",
+							"host": [
+								"{{GeneralURL}}{{DEVEnvironment}}v1"
+							],
+							"path": [
+								"serviceUnavailability"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{Token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
